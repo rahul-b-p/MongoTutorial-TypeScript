@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.deleteRouter = exports.readRouter = exports.updateRouter = exports.createRouter = void 0;
+var create_router_1 = require("./create.router");
+Object.defineProperty(exports, "createRouter", { enumerable: true, get: function () { return create_router_1.router; } });
+var update_router_1 = require("./update.router");
+Object.defineProperty(exports, "updateRouter", { enumerable: true, get: function () { return update_router_1.router; } });
+var read_router_1 = require("./read.router");
+Object.defineProperty(exports, "readRouter", { enumerable: true, get: function () { return read_router_1.router; } });
+var delete_router_1 = require("./delete.router");
+Object.defineProperty(exports, "deleteRouter", { enumerable: true, get: function () { return delete_router_1.router; } });
