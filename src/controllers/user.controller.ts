@@ -24,9 +24,12 @@ export const createUser = async (req: Request<{}, any, userBody>, res: Response)
     }
 }
 
-export const readUser = async (req: Request, res: Response) => {
+export const readUser = async (req: Request<{}, any, any, { name: string }>, res: Response) => {
     try {
-        const allUsers = await users.find();
+        const { name } = req.query
+        const allUsers = await users.find({
+            username: { $regex: name, $options: "i" },
+        },{_id:1,username:1,age:1}).sort({username:1});
         res.json({ message: 'Fetched all users', data: allUsers });
     } catch (error: any) {
         res.status(500).json({ error: error.message });
@@ -50,7 +53,7 @@ export const deleteUser = async (req: Request<{ id: string }>, res: Response) =>
     try {
         const { id } = req.params
         const deletedUser = await users.findByIdAndDelete({ _id: id });
-        res.json({message:'Deleted Successful',data:deletedUser});
+        res.json({ message: 'Deleted Successful', data: deletedUser });
     } catch (error: any) {
         res.status(500).json({ error: error.message });
     }

@@ -36,7 +36,10 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 exports.createUser = createUser;
 const readUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const allUsers = yield users_model_1.default.find();
+        const { name } = req.query;
+        const allUsers = yield users_model_1.default.find({
+            username: { $regex: name, $options: "i" },
+        }, { _id: 1, username: 1, age: 1 }).sort({ username: 1 });
         res.json({ message: 'Fetched all users', data: allUsers });
     }
     catch (error) {
