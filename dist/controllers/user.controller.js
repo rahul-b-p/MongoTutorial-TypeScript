@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.readUserByAge = exports.deleteUser = exports.updateUser = exports.readUser = exports.createUser = void 0;
+exports.readAge = exports.readUserByAge = exports.deleteUser = exports.updateUser = exports.readUser = exports.createUser = void 0;
 const console_1 = require("console");
 const users_model_1 = __importDefault(require("../models/users.model"));
 const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -91,3 +91,17 @@ const readUserByAge = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     }
 });
 exports.readUserByAge = readUserByAge;
+const readAge = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const agesByAggregation = yield users_model_1.default.aggregate([{ $group: { _id: "$age", count: { $sum: 1 } } }, { $sort: { _id: 1 } }]);
+        const ResponseData = [];
+        agesByAggregation.map((item) => {
+            ResponseData.push({ age: item._id, count: item.count });
+        });
+        res.json(ResponseData);
+    }
+    catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+exports.readAge = readAge;

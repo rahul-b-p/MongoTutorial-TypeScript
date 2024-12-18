@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { userBody } from "../types/body.type";
-import { log } from "console";
+import { group, log } from "console";
 import users from "../models/users.model";
 
 
@@ -80,3 +80,16 @@ export const readUserByAge = async (req: Request<{ age: string }>, res: Response
         res.status(500).json({ error: error.message });
     }
 };
+
+export const readAge = async (req: Request, res: Response) => {
+    try {
+        const agesByAggregation = await users.aggregate([{ $group: { _id: "$age", count: { $sum: 1 } } }, { $sort: { _id: 1 } }])
+        const ResponseData:any = [];
+        agesByAggregation.map((item)=>{
+            ResponseData.push({age:item._id,count:item.count})
+        })
+        res.json(ResponseData);
+    } catch (error: any) {
+        res.status(500).json({ error: error.message })
+    }
+}
