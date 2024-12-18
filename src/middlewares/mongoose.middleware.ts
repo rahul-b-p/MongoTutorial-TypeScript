@@ -14,7 +14,7 @@ export const ensureAgeIndex = async (
             return;
         }
 
-        await ensureIndexCreated(age);
+        await ensureIndexCreated();
         next();
     } catch (error: any) {
         res.status(500).json({ error: error.message })

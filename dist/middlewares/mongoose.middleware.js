@@ -18,7 +18,7 @@ const ensureAgeIndex = (req, res, next) => __awaiter(void 0, void 0, void 0, fun
             res.status(400).json({ message: 'Invalid age parameter' });
             return;
         }
-        yield (0, indexManager_1.ensureIndexCreated)(age);
+        yield (0, indexManager_1.ensureIndexCreated)();
         next();
     }
     catch (error) {

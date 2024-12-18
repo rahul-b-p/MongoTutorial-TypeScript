@@ -15,9 +15,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ensureIndexCreated = void 0;
 const users_model_1 = __importDefault(require("../models/users.model"));
 let isAgeIndexCreated = false;
-const ensureIndexCreated = (age) => __awaiter(void 0, void 0, void 0, function* () {
+const ensureIndexCreated = () => __awaiter(void 0, void 0, void 0, function* () {
     if (!isAgeIndexCreated) {
-        yield users_model_1.default.collection.createIndex({ age }, {
+        yield users_model_1.default.collection.createIndex({ age: 1 }, {
             background: true,
             unique: false
         });
