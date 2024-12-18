@@ -12,9 +12,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteUser = exports.updateUser = exports.readUser = exports.createUser = void 0;
-const users_model_1 = __importDefault(require("../models/users.model"));
+exports.readUserByAge = exports.deleteUser = exports.updateUser = exports.readUser = exports.createUser = void 0;
 const console_1 = require("console");
+const users_model_1 = __importDefault(require("../models/users.model"));
 const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { username, email, age } = req.body;
@@ -72,3 +72,22 @@ const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.deleteUser = deleteUser;
+const readUserByAge = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const age = Number(req.params.age);
+        if (isNaN(age)) {
+            res.status(400).json({ message: 'Invalid age parameter' });
+            return;
+        }
+        const usersOfAge = yield users_model_1.default.find({ age });
+        if (usersOfAge.length === 0) {
+            res.status(404).json({ message: 'No users found for this age' });
+            return;
+        }
+        res.json({ message: 'Users fetched successfully', data: usersOfAge });
+    }
+    catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+exports.readUserByAge = readUserByAge;

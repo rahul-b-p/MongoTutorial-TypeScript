@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { userBody } from "../types/body.type";
-import users from "../models/users.model";
 import { log } from "console";
+import users from "../models/users.model";
 
 
 export const createUser = async (req: Request<{}, any, userBody>, res: Response) => {
@@ -29,7 +29,7 @@ export const readUser = async (req: Request<{}, any, any, { name: string }>, res
         const { name } = req.query
         const allUsers = await users.find({
             username: { $regex: name, $options: "i" },
-        },{_id:1,username:1,age:1}).sort({username:1});
+        }, { _id: 1, username: 1, age: 1 }).sort({ username: 1 });
         res.json({ message: 'Fetched all users', data: allUsers });
     } catch (error: any) {
         res.status(500).json({ error: error.message });
@@ -58,3 +58,25 @@ export const deleteUser = async (req: Request<{ id: string }>, res: Response) =>
         res.status(500).json({ error: error.message });
     }
 }
+
+export const readUserByAge = async (req: Request<{ age: string }>, res: Response) => {
+    try {
+        const age = Number(req.params.age);
+
+        if (isNaN(age)) {
+            res.status(400).json({ message: 'Invalid age parameter' });
+            return;
+        }
+
+        const usersOfAge = await users.find({ age });
+
+        if (usersOfAge.length === 0) {
+            res.status(404).json({ message: 'No users found for this age' });
+            return;
+        }
+
+        res.json({ message: 'Users fetched successfully', data: usersOfAge });
+    } catch (error: any) {
+        res.status(500).json({ error: error.message });
+    }
+};
